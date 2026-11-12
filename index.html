@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OpenBrod — open-source tools for serious Java projects</title>
+<meta name="description" content="OpenBrod is the home of 7-Zip-JBinding, Stunt and MIG-Ace: open-source tools for Java projects that have to work in production.">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<meta property="og:title" content="OpenBrod — open-source tools for serious Java projects">
+<meta property="og:description" content="Home of 7-Zip-JBinding, Stunt and MIG-Ace.">
+<style>
+  :root{
+    --bg:#fbfaf7; --bg-2:#f3f1ec; --surface:#ffffff; --border:#e4e0d8; --border-2:#d2cdc2;
+    --text:#16201f; --text-2:#4b5654; --text-3:#7d8684;
+    --brand:#0f5e6b; --brand-2:#13808f; --brand-soft:#e3f1f1; --sun:#e9a91c;
+    --mono:ui-monospace,"JetBrains Mono","Cascadia Code",Menlo,Consolas,monospace;
+    --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+    --r:14px; --maxw:1080px;
+    /* project accents */
+    --p-7z:#2f6fde; --p-stunt:#e2533f; --p-mig:#7a5bd6;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0e1514; --bg-2:#121c1b; --surface:#152120; --border:#22302e; --border-2:#2f403d;
+      --text:#e8eeec; --text-2:#a9b5b2; --text-3:#7a8885;
+      --brand:#5cc4cc; --brand-2:#86dade; --brand-soft:#16302f; --sun:#ffc857;
+      --p-7z:#6aa1ff; --p-stunt:#ff7a63; --p-mig:#a990ff;
+    }
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:var(--brand);text-decoration:none} a:hover{color:var(--brand-2)}
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  code,.mono{font-family:var(--mono)}
+
+  /* header */
+  header{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+  .nav{display:flex;align-items:center;gap:28px;height:64px}
+  .logo{display:flex;align-items:center;gap:10px;color:var(--text);font-weight:750;font-size:1.12rem;letter-spacing:-.01em}
+  .logo:hover{color:var(--text)}
+  .logo b{color:var(--brand);font-weight:750}
+  .nav nav{margin-left:auto;display:flex;gap:24px;align-items:center}
+  .nav nav a{color:var(--text-2);font-size:.93rem;font-weight:500}
+  .nav nav a:hover{color:var(--text)}
+  .gh-btn{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--border-2);border-radius:9px;padding:6px 12px;color:var(--text)!important}
+  .gh-btn:hover{background:var(--surface)}
+
+  /* hero */
+  .hero{position:relative;padding:88px 0 72px;overflow:hidden}
+  .hero::before{content:"";position:absolute;inset:0;pointer-events:none;
+    background-image:radial-gradient(var(--border) 1px,transparent 1px);background-size:22px 22px;
+    mask-image:radial-gradient(ellipse 70% 80% at 70% 30%,#000 30%,transparent 75%);opacity:.9}
+  .hero .wrap{position:relative}
+  .eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.8rem;color:var(--brand);
+    background:var(--brand-soft);border:1px solid color-mix(in srgb,var(--brand) 25%,transparent);padding:4px 12px;border-radius:999px;margin-bottom:22px}
+  .eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--sun)}
+  h1{font-size:clamp(2.3rem,5.2vw,3.6rem);line-height:1.08;letter-spacing:-.03em;margin:0 0 20px;max-width:820px}
+  h1 em{font-style:normal;color:var(--brand)}
+  .lead{font-size:1.15rem;color:var(--text-2);max-width:640px;margin:0 0 32px}
+  .cta{display:flex;gap:12px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:10px;font-weight:600;font-size:.95rem;border:1px solid transparent}
+  .btn-primary{background:var(--brand);color:#fff}
+  .btn-primary:hover{background:var(--brand-2);color:#fff}
+  @media (prefers-color-scheme: dark){.btn-primary{color:#05201f}.btn-primary:hover{color:#05201f}}
+  .btn-ghost{border-color:var(--border-2);color:var(--text)}
+  .btn-ghost:hover{background:var(--surface);color:var(--text)}
+
+  /* sections */
+  section{padding:64px 0}
+  .kicker{font-family:var(--mono);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text-3);margin-bottom:10px}
+  h2{font-size:clamp(1.5rem,3vw,2rem);letter-spacing:-.02em;margin:0 0 10px}
+  .sub{color:var(--text-2);max-width:640px;margin:0 0 34px}
+
+  /* project cards */
+  .projects{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+  @media (max-width:920px){.projects{grid-template-columns:1fr}}
+  .proj{position:relative;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:26px 24px 22px;transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease}
+  .proj::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;border-radius:var(--r) var(--r) 0 0;background:var(--accent)}
+  .proj:hover{transform:translateY(-2px);border-color:var(--border-2);box-shadow:0 14px 34px rgba(20,40,38,.08)}
+  .proj-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .proj-ico{width:42px;height:42px;border-radius:11px;display:grid;place-items:center;flex:0 0 42px;
+    background:color-mix(in srgb,var(--accent) 13%,transparent);color:var(--accent);font-family:var(--mono);font-weight:700;font-size:.95rem}
+  .proj h3{margin:0;font-size:1.22rem;letter-spacing:-.01em}
+  .status{margin-left:auto;font-family:var(--mono);font-size:.72rem;padding:3px 9px;border-radius:999px;border:1px solid var(--border-2);color:var(--text-2);white-space:nowrap}
+  .status.mature{color:#1d8a52;border-color:color-mix(in srgb,#1d8a52 35%,transparent)}
+  .status.new{color:var(--p-stunt);border-color:color-mix(in srgb,var(--p-stunt) 35%,transparent)}
+  .status.dev{color:var(--p-mig);border-color:color-mix(in srgb,var(--p-mig) 35%,transparent)}
+  .tagline{font-weight:600;color:var(--text);margin:0 0 8px}
+  .proj p.desc{color:var(--text-2);font-size:.94rem;margin:0 0 16px}
+  .facts{list-style:none;margin:0 0 20px;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+  .facts li{font-family:var(--mono);font-size:.74rem;color:var(--text-2);background:var(--bg-2);border:1px solid var(--border);border-radius:6px;padding:2px 8px}
+  .proj-links{margin-top:auto;display:flex;gap:16px;padding-top:14px;border-top:1px solid var(--border);font-size:.92rem;font-weight:600}
+  .proj-links a{color:var(--accent)}
+  .proj-links a:hover{text-decoration:underline}
+
+  /* principles */
+  .principles{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  @media (max-width:920px){.principles{grid-template-columns:1fr 1fr}}
+  @media (max-width:560px){.principles{grid-template-columns:1fr}}
+  .pr{padding:20px;border-radius:12px;background:var(--bg-2);border:1px solid var(--border)}
+  .pr h4{margin:0 0 6px;font-size:1rem;display:flex;gap:8px;align-items:baseline}
+  .pr p{margin:0;color:var(--text-2);font-size:.92rem}
+  .pr .n{font-family:var(--mono);color:var(--brand);font-size:.8rem}
+
+  /* name story */
+  .story{display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:28px}
+  @media (max-width:640px){.story{grid-template-columns:1fr}}
+  .story p{margin:0;color:var(--text-2)}
+  .story b{color:var(--text)}
+
+  /* contribute */
+  .contrib{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;
+    background:linear-gradient(120deg,var(--brand) 0%,var(--brand-2) 100%);color:#fff;border-radius:var(--r);padding:34px 32px}
+  .contrib h2{color:#fff;margin:0 0 6px}
+  .contrib p{margin:0;color:rgba(255,255,255,.86);max-width:560px}
+  .contrib .btn{background:#fff;color:var(--brand)}
+  .contrib .btn:hover{background:#f0f7f7;color:var(--brand)}
+  .contrib .btn.ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.55)}
+  .contrib .btn.ghost:hover{background:rgba(255,255,255,.1)}
+  @media (prefers-color-scheme: dark){.contrib{color:#05201f}.contrib h2{color:#05201f}.contrib p{color:rgba(5,32,31,.82)}.contrib .btn{background:#05201f;color:#bdeef0}.contrib .btn.ghost{color:#05201f;border-color:rgba(5,32,31,.45);background:transparent}}
+
+  footer{border-top:1px solid var(--border);margin-top:40px;padding:30px 0 40px;color:var(--text-3);font-size:.88rem}
+  .foot{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  .foot a{color:var(--text-2)} .foot a:hover{color:var(--text)}
+  .foot-links{display:flex;gap:20px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a class="logo" href="/"><img src="/favicon.svg" alt="" width="30" height="30"><span>Open<b>Brod</b></span></a>
+    <nav>
+      <a href="#projects">Projects</a>
+      <a href="#principles">Principles</a>
+      <a href="#contribute">Contribute</a>
+      <a class="gh-btn" href="https://github.com/borisbrodski">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <span class="eyebrow"><span class="dot"></span>open source · JVM · production-grade</span>
+      <h1>Open-source tools for Java projects that <em>have to work</em>.</h1>
+      <p class="lead">OpenBrod is the home of a small family of developer tools: a long-standing archive library,
+        a mocking framework for code you can't redesign, and a migration framework that proves your database schema.
+        Free to use, open to contributions.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="#projects">Explore the projects</a>
+        <a class="btn btn-ghost" href="https://github.com/borisbrodski">Browse on GitHub</a>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" style="padding-top:24px">
+    <div class="wrap">
+      <div class="kicker">// projects</div>
+      <h2>Three tools, one standard</h2>
+      <p class="sub">Each project solves a hard, concrete problem in real-world Java code bases, and is documented,
+        tested and released like a product.</p>
+
+      <div class="projects">
+        <article class="proj" style="--accent:var(--p-7z)">
+          <div class="proj-head">
+            <div class="proj-ico">7z</div>
+            <h3>7-Zip-JBinding</h3>
+            <span class="status mature">mature</span>
+          </div>
+          <p class="tagline">The real 7-Zip engine, bound to Java.</p>
+          <p class="desc">Extract and create archives with native 7-Zip performance, in-process through JNI.
+            Streaming, callback-driven I/O, one jar for Windows, Linux and macOS.</p>
+          <ul class="facts"><li>20+ formats</li><li>Java 8+</li><li>LGPL 2.1</li><li>Maven Central</li></ul>
+          <div class="proj-links">
+            <a href="https://sevenzipjbind.sourceforge.net/">Website →</a>
+            <a href="https://github.com/borisbrodski/sevenzipjbinding">GitHub</a>
+          </div>
+        </article>
+
+        <article class="proj" style="--accent:var(--p-stunt)">
+          <div class="proj-head">
+            <div class="proj-ico">St</div>
+            <h3>Stunt</h3>
+            <span class="status new">new</span>
+          </div>
+          <p class="tagline">Mock the code you can't inject into.</p>
+          <p class="desc">A mocking framework for JUnit 5 that changes classes in place: statics, private methods,
+            final classes, objects created with <code>new</code> and JDK types — no redesign for testability.</p>
+          <ul class="facts"><li>JUnit 5</li><li>Java 17+</li><li>Apache 2.0</li><li>JMockit migration guide</li></ul>
+          <div class="proj-links">
+            <a href="https://stuntmock.openbrod.org/">Website →</a>
+            <a href="https://github.com/borisbrodski/stuntmock">GitHub</a>
+          </div>
+        </article>
+
+        <article class="proj" style="--accent:var(--p-mig)">
+          <div class="proj-head">
+            <div class="proj-ico">MA</div>
+            <h3>MIG-Ace</h3>
+            <span class="status dev">in development</span>
+          </div>
+          <p class="tagline">Schema migrations you can prove.</p>
+          <p class="desc">A migration framework for PostgreSQL and Hibernate that migrates a database with real data
+            and proves the result matches the schema your application expects.</p>
+          <ul class="facts"><li>PostgreSQL</li><li>Hibernate</li><li>Kotlin</li><li>Gradle</li></ul>
+          <div class="proj-links">
+            <a href="https://migace.openbrod.org/">Website →</a>
+            <a href="https://github.com/borisbrodski/migace">GitHub</a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section id="principles">
+    <div class="wrap">
+      <div class="kicker">// principles</div>
+      <h2>How we build</h2>
+      <p class="sub">Open source doesn't mean unfinished. Every OpenBrod project follows the same rules.</p>
+      <div class="principles">
+        <div class="pr"><h4><span class="n">01</span>Real problems</h4><p>Tools come out of long-running production projects, not from a whiteboard.</p></div>
+        <div class="pr"><h4><span class="n">02</span>Explicit over magic</h4><p>Clear behaviour, readable failures, and no surprises for the people who maintain the code.</p></div>
+        <div class="pr"><h4><span class="n">03</span>Tested and documented</h4><p>Extensive test suites, CI on every change, and documentation written as a guide.</p></div>
+        <div class="pr"><h4><span class="n">04</span>Open by default</h4><p>Open-source licenses, public issue trackers, releases on Maven Central.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="padding-top:8px">
+    <div class="wrap">
+      <div class="story">
+        <img src="/favicon.svg" alt="" width="64" height="64">
+        <p><b>Why “OpenBrod”?</b> In Slavic languages, <i>brod</i> means a ford — the shallow place where you can
+          safely cross a river. That's what these tools are for: getting your project safely across the hard parts,
+          one stepping stone at a time.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contribute">
+    <div class="wrap">
+      <div class="contrib">
+        <div>
+          <h2>Contributions welcome</h2>
+          <p>Found a bug, missing a feature, or want to help? Every project has a public issue tracker,
+            and pull requests are reviewed with care.</p>
+        </div>
+        <div class="cta">
+          <a class="btn" href="https://github.com/borisbrodski">Get involved on GitHub</a>
+          <a class="btn ghost" href="https://github.com/sponsors/borisbrodski">Sponsor ❤</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <span>© 2026 OpenBrod · Boris Brodski and contributors</span>
+    <span class="foot-links">
+      <a href="https://sevenzipjbind.sourceforge.net/">7-Zip-JBinding</a>
+      <a href="https://stuntmock.openbrod.org/">Stunt</a>
+      <a href="https://migace.openbrod.org/">MIG-Ace</a>
+      <a href="https://github.com/borisbrodski">GitHub</a>
+    </span>
+  </div>
+</footer>
+
+</body>
+</html>
