@@ -3,11 +3,20 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>OpenBrod — open-source tools for serious Java projects</title>
-<meta name="description" content="OpenBrod is the home of 7-Zip-JBinding, Stunt and MIG-Ace: open-source tools for Java projects that have to work in production.">
+<title>OpenBrod — open-source developer tools for JVM and DSL projects</title>
+<meta name="description" content="OpenBrod is the home of 7-Zip-JBinding, Stunt, langium-tools and MIG-Ace: open-source developer tools for JVM and DSL projects that have to work in production.">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<meta property="og:title" content="OpenBrod — open-source tools for serious Java projects">
-<meta property="og:description" content="Home of 7-Zip-JBinding, Stunt and MIG-Ace.">
+<link rel="canonical" href="https://openbrod.org/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="OpenBrod">
+<meta property="og:url" content="https://openbrod.org/">
+<meta property="og:title" content="OpenBrod — open-source developer tools that have to work">
+<meta property="og:description" content="Home of 7-Zip-JBinding, Stunt, langium-tools and MIG-Ace.">
+<meta property="og:image" content="https://openbrod.org/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="OpenBrod logo: stepping stones across water, with the four project names">
+<meta name="twitter:card" content="summary_large_image">
 <style>
   :root{
     --bg:#fbfaf7; --bg-2:#f3f1ec; --surface:#ffffff; --border:#e4e0d8; --border-2:#d2cdc2;
@@ -17,14 +26,14 @@
     --sans:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
     --r:14px; --maxw:1080px;
     /* project accents */
-    --p-7z:#2f6fde; --p-stunt:#e2533f; --p-mig:#7a5bd6;
+    --p-7z:#2f6fde; --p-stunt:#e2533f; --p-lt:#0f8f73; --p-mig:#7a5bd6;
   }
   @media (prefers-color-scheme: dark){
     :root{
       --bg:#0e1514; --bg-2:#121c1b; --surface:#152120; --border:#22302e; --border-2:#2f403d;
       --text:#e8eeec; --text-2:#a9b5b2; --text-3:#7a8885;
       --brand:#5cc4cc; --brand-2:#86dade; --brand-soft:#16302f; --sun:#ffc857;
-      --p-7z:#6aa1ff; --p-stunt:#ff7a63; --p-mig:#a990ff;
+      --p-7z:#6aa1ff; --p-stunt:#ff7a63; --p-lt:#3fd6ae; --p-mig:#a990ff;
     }
   }
   *{box-sizing:border-box}
@@ -73,8 +82,8 @@
   .sub{color:var(--text-2);max-width:640px;margin:0 0 34px}
 
   /* project cards */
-  .projects{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
-  @media (max-width:920px){.projects{grid-template-columns:1fr}}
+  .projects{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+  @media (max-width:760px){.projects{grid-template-columns:1fr}}
   .proj{position:relative;display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:26px 24px 22px;transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease}
   .proj::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;border-radius:var(--r) var(--r) 0 0;background:var(--accent)}
   .proj:hover{transform:translateY(-2px);border-color:var(--border-2);box-shadow:0 14px 34px rgba(20,40,38,.08)}
@@ -85,6 +94,7 @@
   .status{margin-left:auto;font-family:var(--mono);font-size:.72rem;padding:3px 9px;border-radius:999px;border:1px solid var(--border-2);color:var(--text-2);white-space:nowrap}
   .status.mature{color:#1d8a52;border-color:color-mix(in srgb,#1d8a52 35%,transparent)}
   .status.new{color:var(--p-stunt);border-color:color-mix(in srgb,var(--p-stunt) 35%,transparent)}
+  .status.rel{color:var(--p-lt);border-color:color-mix(in srgb,var(--p-lt) 35%,transparent)}
   .status.dev{color:var(--p-mig);border-color:color-mix(in srgb,var(--p-mig) 35%,transparent)}
   .tagline{font-weight:600;color:var(--text);margin:0 0 8px}
   .proj p.desc{color:var(--text-2);font-size:.94rem;margin:0 0 16px}
@@ -145,10 +155,11 @@
 <main>
   <section class="hero">
     <div class="wrap">
-      <span class="eyebrow"><span class="dot"></span>open source · JVM · production-grade</span>
-      <h1>Open-source tools for Java projects that <em>have to work</em>.</h1>
-      <p class="lead">OpenBrod is the home of a small family of developer tools: a long-standing archive library,
-        a mocking framework for code you can't redesign, and a migration framework that proves your database schema.
+      <span class="eyebrow"><span class="dot"></span>open source · JVM · DSLs · production-grade</span>
+      <h1>Open-source developer tools that <em>have to work</em>.</h1>
+      <p class="lead">OpenBrod is the home of a small family of developer tools: a long-standing archive library for Java,
+        a mocking framework for code you can't redesign, a toolkit for building DSLs with Langium, and a migration
+        framework that proves your database schema.
         Free to use, open to contributions.</p>
       <div class="cta">
         <a class="btn btn-primary" href="#projects">Explore the projects</a>
@@ -160,8 +171,8 @@
   <section id="projects" style="padding-top:24px">
     <div class="wrap">
       <div class="kicker">// projects</div>
-      <h2>Three tools, one standard</h2>
-      <p class="sub">Each project solves a hard, concrete problem in real-world Java code bases, and is documented,
+      <h2>Four tools, one standard</h2>
+      <p class="sub">Each project solves a hard, concrete problem in real-world code bases, and is documented,
         tested and released like a product.</p>
 
       <div class="projects">
@@ -197,6 +208,23 @@
           </div>
         </article>
 
+        <article class="proj" style="--accent:var(--p-lt)">
+          <div class="proj-head">
+            <div class="proj-ico">Lt</div>
+            <h3>langium-tools</h3>
+            <span class="status rel">released</span>
+          </div>
+          <p class="tagline">The work around the grammar, already built.</p>
+          <p class="desc">A TypeScript library for DSLs built with Langium: one list of lexer, parser and validation
+            issues, generators that only rewrite files whose content changed, and snapshot tests for whole trees of
+            generated files.</p>
+          <ul class="facts"><li>TypeScript</li><li>Langium 4.4</li><li>MIT</li><li>npm</li></ul>
+          <div class="proj-links">
+            <a href="https://langium-tools.openbrod.org/">Website →</a>
+            <a href="https://github.com/borisbrodski/langium-tools">GitHub</a>
+          </div>
+        </article>
+
         <article class="proj" style="--accent:var(--p-mig)">
           <div class="proj-head">
             <div class="proj-ico">MA</div>
@@ -225,7 +253,7 @@
         <div class="pr"><h4><span class="n">01</span>Real problems</h4><p>Tools come out of long-running production projects, not from a whiteboard.</p></div>
         <div class="pr"><h4><span class="n">02</span>Explicit over magic</h4><p>Clear behaviour, readable failures, and no surprises for the people who maintain the code.</p></div>
         <div class="pr"><h4><span class="n">03</span>Tested and documented</h4><p>Extensive test suites, CI on every change, and documentation written as a guide.</p></div>
-        <div class="pr"><h4><span class="n">04</span>Open by default</h4><p>Open-source licenses, public issue trackers, releases on Maven Central.</p></div>
+        <div class="pr"><h4><span class="n">04</span>Open by default</h4><p>Open-source licenses, public issue trackers, releases on Maven Central and npm.</p></div>
       </div>
     </div>
   </section>
@@ -264,6 +292,7 @@
     <span class="foot-links">
       <a href="https://sevenzipjbind.sourceforge.net/">7-Zip-JBinding</a>
       <a href="https://stuntmock.openbrod.org/">Stunt</a>
+      <a href="https://langium-tools.openbrod.org/">langium-tools</a>
       <a href="https://migace.openbrod.org/">MIG-Ace</a>
       <a href="https://github.com/borisbrodski">GitHub</a>
     </span>
